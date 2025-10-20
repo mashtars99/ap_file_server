@@ -1,0 +1,13 @@
+[project]
+name = "file-server"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.116.1",
+    "passporteye>=2.2.2",
+    "pyinstaller>=6.14.2",
+    "python-multipart>=0.0.20",
+    "uvicorn>=0.35.0",
+]
