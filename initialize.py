@@ -25,24 +25,6 @@ def user_access(lic):
 """.strip()
 
 
-def create_business(business: dict):
-   return f"""
-
-   use ns airportal;
-   use db airportal;
-
-    create business content {{
-    name: "{business["name"]}",
-    address: "{business["address"]}",
-    contacts: {business["contacts"]},
-    logo: "deflogo.png",
-    }};
-    
-  
-  
-""".strip()
-
-
 
 async def initialize():
     OS_NAME = sys.platform
@@ -104,7 +86,7 @@ async def initialize():
     
     subprocess.Popen([dbExe,
         "import", "--conn", conn, "-u", "root", "-p", "root", "--ns", "airportal", "--db", "airportal",
-        schema_path.absolute().joinpath("initialization.surql")
+        schema_path.absolute().joinpath("init.surql")
         ])
     
     
@@ -116,34 +98,6 @@ async def initialize():
     
     print("initialized")
 
-
-    print("======= creating business =======")
-
-    with open("bdata") as bdf:
-        dt = json.loads(bdf.read())
-        
-
-    
-    with tempfile.NamedTemporaryFile(mode="w+", delete=False, delete_on_close=False, suffix=".surql") as bdf:
-        bdf.write(create_business(dt))
-        bdf.flush() 
-        bdf.seek(0)  
-        filePath = pathlib.Path(bdf.name).absolute()
-
-
-        subprocess.Popen([dbExe,
-        "import", "--conn", conn, "-u", "root", "-p", "root", "--ns", "airportal", "--db", "airportal",
-            filePath
-        ])
-
-    await asyncio.sleep(2)
-    pathlib.Path(bdf.name).unlink(missing_ok=True)  # Manually delete if needed
-
-
-
-
-
-    print("======= created business =======")
 
     await asyncio.sleep(3)
 

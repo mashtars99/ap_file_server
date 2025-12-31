@@ -13,6 +13,13 @@ def create_or_replace_folder(path):
     os.makedirs(path)        # Create the new folder
 
 
+def generate_init():
+    with open("./schema/init.surql", "w") as result:
+        for fl in os.listdir("./initialization"):
+            with open("./initialization/" + fl, "r") as f:
+                result.write(f.read())
+
+
 
 
 async def genereate():
@@ -38,6 +45,7 @@ async def genereate():
             )
     await asyncio.sleep(1)
     
+    generate_init()
     
 
 if __name__ == "__main__":

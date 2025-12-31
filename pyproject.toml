@@ -5,7 +5,9 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "docxtpl>=0.20.2",
     "fastapi>=0.116.1",
+    "jinja2>=3.1.6",
     "passporteye>=2.2.2",
     "pyinstaller>=6.14.2",
     "python-multipart>=0.0.20",
