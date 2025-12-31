@@ -9,5 +9,6 @@ wheels/
 # Virtual environments
 .venv
 db
+_db
 __db__
 __files__
