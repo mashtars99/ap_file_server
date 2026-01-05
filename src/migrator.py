@@ -100,5 +100,5 @@ def generate() -> str:
 
 if __name__ == "__main__":
     # asyncio.run(migrate())
-    # generate()
+    generate()
     ...

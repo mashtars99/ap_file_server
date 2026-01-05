@@ -43,8 +43,6 @@ async def initialize():
     else:
         HOME_PATH = pathlib.Path(__file__).parent.parent.absolute()
 
-    print(HOME_PATH)
-
     db_folder = f"surrealkv:{HOME_PATH.absolute().joinpath("__db__")}"
     dbExe = pathlib.Path(f"{HOME_PATH}/db")
 
@@ -59,8 +57,13 @@ async def initialize():
 
     await asyncio.sleep(2)
 
+    host = None
+    if OS_NAME == "win32":
+        host = "localhost:4444"
+    else:
+        host = "0.0.0.0:4444"
 
-    with Surreal(f"ws://0.0.0.0:4444/rpc") as db:
+    with Surreal(f"ws://{host}/rpc") as db:
         db.signin({"username": 'root', "password": 'root'})
         db.query(user_access(license))
 
