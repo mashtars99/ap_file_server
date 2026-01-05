@@ -7,6 +7,7 @@ from surrealdb import Surreal
 import os
 import shutil
 import datetime
+import psutil
 
 async def migrate():
     # ASSUMES THE DB SERVER IS RUNNING.
@@ -98,7 +99,60 @@ def generate() -> str:
 
 
 
+def check_port_usage(port):
+    # Iterate through all connections
+    for conn in psutil.net_connections(kind='inet'):
+
+        if conn.laddr.port == port and conn.status == 'LISTEN':
+            pid = conn.pid
+            process = psutil.Process(pid)
+            return True, process.name(), pid  # Process is using the port
+    return False, None, None  # No process is using the port
+
+
+
+
+async def apply_migrations():
+    OS_NAME = sys.platform
+
+    if getattr(sys, 'frozen', False):
+        HOME_PATH = pathlib.Path(sys.executable).parent
+    else:
+        HOME_PATH = pathlib.Path(__file__).parent.parent.absolute()
+
+    db_folder = f"surrealkv:{HOME_PATH.absolute().joinpath("__db__")}"
+    dbExe = pathlib.Path(f"{HOME_PATH}/db")
+
+    try:
+        subprocess.Popen(
+            [dbExe, "start", db_folder, "-b", "0.0.0.0:4444", "-u", "root", "-p", "root"]
+        )
+    except:
+        pass
+
+    await asyncio.sleep(2)
+
+
+    await migrate()
+
 if __name__ == "__main__":
-    # asyncio.run(migrate())
-    generate()
-    ...
+    import argparse
+
+    # Create the parser
+    parser = argparse.ArgumentParser()
+
+    # Define the positional argument
+    parser.add_argument("type", help="")
+
+    # Parse the arguments
+    args = parser.parse_args()
+
+    if(args.type == "generate"):
+        generate()
+    elif(args.type == "apply"):
+        asyncio.run(apply_migrations())
+    
+
+    
+
+

@@ -9,6 +9,8 @@ async def main():
     OS_NAME = sys.platform
     subprocess.run(["uv", "run", "pyinstaller", "src/main.py", "--onefile"])
 
+    subprocess.run(["uv", "run", "pyinstaller", "src/migrator.py", "--onefile", "--name", "migrator.exe"])
+
     if(os.path.exists("./deploy")):
         shutil.rmtree("./deploy")
 
@@ -25,8 +27,8 @@ async def main():
     shutil.copytree("./migrations", "./deploy/migrations")
     shutil.copytree("./docviewer", "./deploy/docviewer")
 
-    if os.path.exists("./migrator.exe"):
-        shutil.copy2("./migrator.exe", "./deploy/migrator.exe")
+
+    shutil.copy2("./dist/migrator.exe", "./deploy/migrator.exe")
 
 
 
