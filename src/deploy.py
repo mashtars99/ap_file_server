@@ -25,6 +25,9 @@ async def main():
     shutil.copytree("./migrations", "./deploy/migrations")
     shutil.copytree("./docviewer", "./deploy/docviewer")
 
+    if os.path.exists("./migrator.exe"):
+        shutil.copy2("./migrator.exe", "./deploy/migrator.exe")
+
 
 
 
