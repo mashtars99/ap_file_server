@@ -12,3 +12,5 @@ db
 _db
 __db__
 __files__
+deploy/
+./deploy
