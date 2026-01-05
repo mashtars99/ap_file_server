@@ -29,7 +29,7 @@ async def migrate():
         db.signin({"username": 'root', "password": 'root'})
         db.use("airportal", "airportal")
 
-        done = db.query("select value name from migration")
+        done = db.query("select value version from migration;")
         migration_folder = HOME_PATH.absolute().joinpath("migrations") 
 
         migrations = []
@@ -37,30 +37,28 @@ async def migrate():
         for fld in os.listdir(migration_folder):
             if not migration_folder.joinpath(fld).is_dir():
                 continue
-
-            migrations.append(
-                datetime.datetime.fromisoformat(fld)
-            )
+            migrations.append(int(fld))
     
            
         migrations.sort()
-        migration_names = list(map(lambda x: str(x), migrations))
 
-        for fld in migration_names:
+        for fld in migrations:
             if(fld in done):
+                print("[IGNORED] ", fld)
                 continue
-            with open(migration_folder.joinpath(fld) / "schema.surql") as f:
+            with open(migration_folder.joinpath(str(fld)) / "schema.surql") as f:
                 schema = f.read()
-            with open(migration_folder.joinpath(fld) / "seeds.surql") as f:
+            with open(migration_folder.joinpath(str(fld)) / "seeds.surql") as f:
                 seeds = f.read()
 
             query = "begin transaction; \n" \
                     f"{schema} \n" \
                     f"{seeds} \n" \
-                    f"create migration content {{name: '{fld}'}}; \n" \
+                    f"create migration content {{version: {fld}}}; \n" \
                     "commit transaction;"
             
             db.query(query)
+
             
     
     print("migration done")
@@ -72,10 +70,18 @@ def generate() -> str:
         HOME_PATH = pathlib.Path(sys.executable).parent
     else:
         HOME_PATH = pathlib.Path(__file__).parent.parent.absolute()
-    now = datetime.datetime.now(datetime.timezone.utc)
-    name = str(now)
-
     migration_folder = HOME_PATH.absolute().joinpath("migrations")
+
+    version = 1
+    for fld in os.listdir(migration_folder):
+        if not migration_folder.joinpath(fld).is_dir():
+            continue
+        version += 1
+
+
+
+    name = str(version)
+
     new_mg_folder = migration_folder.absolute() / name
     os.mkdir(new_mg_folder)
 
@@ -93,4 +99,6 @@ def generate() -> str:
 
 
 if __name__ == "__main__":
-    asyncio.run(migrate())
+    # asyncio.run(migrate())
+    # generate()
+    ...

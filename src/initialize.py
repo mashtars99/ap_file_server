@@ -26,7 +26,7 @@ def user_access(lic):
 
     // migrations
     define table migration schemaless type normal permissions none;
-    define field name on migration type string assert string::len($value) > 0;
+    define field version on migration type int assert $value > 0;
 
     define index unique_migration on migration fields name unique;
   
