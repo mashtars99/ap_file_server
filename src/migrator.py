@@ -47,9 +47,9 @@ async def migrate():
             if(fld in done):
                 print("[IGNORED] ", fld)
                 continue
-            with open(migration_folder.joinpath(str(fld)) / "schema.surql") as f:
+            with open(migration_folder.joinpath(str(fld)) / "schema.surql", encoding="utf-8") as f:
                 schema = f.read()
-            with open(migration_folder.joinpath(str(fld)) / "seeds.surql") as f:
+            with open(migration_folder.joinpath(str(fld)) / "seeds.surql", encoding="utf-8") as f:
                 seeds = f.read()
 
             query = "begin transaction; \n" \
