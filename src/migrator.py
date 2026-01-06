@@ -87,10 +87,10 @@ def generate() -> str:
     os.mkdir(new_mg_folder)
 
 
-    with open(new_mg_folder.joinpath("schema.surql"), "w"):
+    with open(new_mg_folder.joinpath("schema.surql"), "w", encoding="utf-8"):
         ...
 
-    with open(new_mg_folder.joinpath("seeds.surql"), "w"):
+    with open(new_mg_folder.joinpath("seeds.surql"), "w", encoding="utf-8"):
         ...
 
     return name
