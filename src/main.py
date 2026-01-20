@@ -60,25 +60,6 @@ async def _get_file(id: str):
     except:
         raise HTTPException(status_code=404)
 
-# @doc_viewer.post("/upload")
-# async def _veiw(fl: UploadFile):
-#     try:
-#         name_ext = fl.filename.split(".")
-#         iid = uuid.uuid4().hex
-#         if len(name_ext) >= 2:
-#             *_, ext = name_ext
-#             name = iid + f".{ext}"
-#         else:
-#             name = iid
-
-#         with open(f"{HOME_PATH}/docviewer/files/{name}", "wb") as f:
-#             f.write(fl.file.read())
-#         return {"id": name}
-
-#     except Exception as e:
-#         print("errro: ", e)
-#         raise HTTPException(status_code=500)
-    
 
 @doc_viewer.post("/get-vars")
 async def _get_vars(fl: UploadFile):
@@ -282,7 +263,6 @@ if __name__ == "__main__":
         if(args.init):
             asyncio.run(initialize.initialize())
         else:
-            print("here!!!!!")
             if getattr(sys, 'frozen', False):
                 HOME_PATH = pathlib.Path(sys.executable).parent
             else:
