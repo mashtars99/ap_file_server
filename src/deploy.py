@@ -3,6 +3,7 @@ import os
 import asyncio
 import shutil
 import sys
+import pickle
 
 
 async def main():
@@ -29,6 +30,14 @@ async def main():
 
 
     shutil.copy2("./dist/migrator.exe", "./deploy/migrator.exe")
+
+    server = {
+        "version": "0.3.0",
+        "db": "2.4.0",
+    }
+
+    with open("./deploy/config", "wb") as f:
+        pickle.dump(server, f)
 
 
 

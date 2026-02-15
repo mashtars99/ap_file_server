@@ -209,19 +209,21 @@ async def shutdown():
     # Now trigger the server shutdown
     raise SystemExit("Server shutdown triggered by /shutdown")
 
+
+
 @app.post("/backup")
 async def backup(file_path: str):
     ...
 
 
 
-
-# def load_config():
-#     path = pathlib.Path("./config").absolute()
+@app.get("/server_info")
+def load_config():
+    path = pathlib.Path("./config.json").absolute()
     
-#     with open(path, "rb") as f:
-#         content = pickle.load(f)
-#     return content
+    with open(path, "rb") as f:
+        content = json.load(f)
+    return content
 
 
 def cleanup():
@@ -269,7 +271,6 @@ if __name__ == "__main__":
                 HOME_PATH = pathlib.Path(__file__).parent.parent.absolute()
 
             path = f"surrealkv:{HOME_PATH.absolute().joinpath("__db__")}"
-            # config = load_config()
 
             dbExe = pathlib.Path(f"{HOME_PATH}/db")
             
