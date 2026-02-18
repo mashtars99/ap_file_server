@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['src/migrator.py'],
+    ['src\\migrator.py'],
     pathex=[],
     binaries=[],
     datas=[],

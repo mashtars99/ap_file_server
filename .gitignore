@@ -14,3 +14,6 @@ __db__
 __files__
 deploy/
 ./deploy
+updater/
+db.exe
+smang/

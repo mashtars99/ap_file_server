@@ -19,6 +19,7 @@ import signal
 import platform
 import atexit
 import os
+import sys
 import initialize as initialize
 
 from docxtpl import DocxTemplate, InlineImage
@@ -213,7 +214,32 @@ async def shutdown():
 
 @app.post("/backup")
 async def backup(file_path: str):
-    ...
+    OS_NAME = sys.platform
+    if getattr(sys, 'frozen', False):
+        HOME_PATH = pathlib.Path(sys.executable).parent
+    else:
+        HOME_PATH = pathlib.Path(__file__).parent.parent.absolute()
+    dbExe = pathlib.Path(f"{HOME_PATH}/db")
+
+    host = None
+    if OS_NAME == "win32":
+        host = "localhost:4444"
+    else:
+        host = "0.0.0.0:4444"
+
+    subprocess.run(
+        [dbExe, "export", "-e", f"http://{host}", "-u", "root", "-p", "root",
+        "--ns", "airportal", "--db", "airportal",
+        "--functions", "true", "--accesses", 'true', "--records", "true",
+        "--tables","true", "--users", "true", "--versions", "true", "--analyzers", "true",
+        "--params", "true",
+        file_path]
+    )
+
+    return {
+        "message": "successfull"
+    }
+
 
 
 
