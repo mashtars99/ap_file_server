@@ -5,7 +5,6 @@ define index overwrite unique_key on airline fields key unique;
 define index overwrite unique_name on airline fields name unique;
 
 
-
 define table overwrite airport type normal schemaless permissions full;
 define field overwrite code on airport type string;
 define field overwrite country_code on airport type string;
@@ -15,8 +14,9 @@ define field overwrite description on airport type string;
 define field overwrite latitude on airport type string;
 define field overwrite longitude on airport type string;
 define field overwrite name on airport type string;
-
 define index if not exists unique_code on airport fields code unique;
+
+
 
 
 define function overwrite fn::add_airport(
@@ -45,6 +45,7 @@ define function overwrite fn::add_airport(
     
 };
 
+
 define function overwrite fn::add_airline(
     $key: string,
     $name: string
@@ -56,6 +57,8 @@ define function overwrite fn::add_airline(
     };
     
 };
+
+
 
 // updated from previous migration
 define function overwrite fn::tickets::edit_ticket(
